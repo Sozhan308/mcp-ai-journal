@@ -7,10 +7,8 @@ from httpx import ASGITransport
 from datetime import datetime, timedelta
 
 @pytest.mark.asyncio
-async def test_health_endpoint():
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/health")
+async def test_health_endpoint(client):
+        response = await client.get("/api/v1/health")
         assert response.status_code==200
         data = response.json()
         assert "version" in data
@@ -30,7 +28,7 @@ async def test_health_endpoint():
         
         await asyncio.sleep(0.01)
         
-        response2 = await ac.get("/health")
+        response2 = await client.get("/api/v1/health")
         data2 = response2.json()
         
         second_ts = datetime.fromisoformat(data2['timestamp'].replace("Z", "+00:00"))
