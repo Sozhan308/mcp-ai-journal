@@ -40,20 +40,42 @@ This journal documents my 30-day journey to gain production-level expertise in:
 - **ASGITransport** allows in-memory testing without spinning up a server.
 - Always test **time-dependent fields** for change and correctness.
 
-### 📂 Code Links
-- [`app/schemas/health.py`](./app/schemas/health.py)
-- [`app/routes/health.py`](./app/routes/health.py)
-- [`tests/test_health.py`](./tests/test_health.py)
-
 ---
 
 
-## Day 2 — Routing & Dependency Injection
+## Day 2 — Routing & Dependency Injection (DI)
+
 ### 🎯 Goal
+- Learn to structure multiple routers cleanly.
+- Use FastAPI dependency injection (`Depends`) to provide data to endpoints.
+- Centralize app configuration with a `Settings` object.
+- Override dependencies in tests to simulate different scenarios.
+
 ### 🛠 Steps Completed
+1. Created a new `/config` endpoint in its own `config.py` router.
+2. Defined a `ConfigResponse` schema with:
+   - `app_name: str`
+   - `version: str`
+   - `debug: bool`
+3. Implemented `get_config()` as a dependency and injected it into the route using `Depends`.
+4. Learned how to override dependencies in tests via `app.dependency_overrides`.
+5. Created a central `Settings` model (`app/core/settings.py`) using Pydantic.
+6. Stored a `Settings` instance in `app.state` at startup.
+7. Updated `/config` to pull data from `Settings` via `get_settings` dependency.
+
 ### ✅ Achievements
+- Modularized routes: `/api/v1/health`, `/api/v1/server-info`, `/api/v1/config`.
+- Made configuration testable and override-friendly without changing route code.
+- Validated DI chain with tests at both `get_config` and `get_settings` levels.
+
 ### 💡 Key Learnings
-### 📂 Code Links
+- **`Depends`** injects dependencies automatically and keeps routes clean.
+- Centralizing config in `app.state` prevents hardcoding and supports test overrides.
+- Dependency overrides are powerful for simulating different runtime conditions.
+- Router tags and summaries improve API docs.
+- Prefix versioning (`/api/v1`) makes future upgrades easier.
+
+---
 
 ## Day 3 — Pydantic v2 Deep Dive
 ### 🎯 Goal

@@ -2,8 +2,6 @@ from app.main import app
 
 import pytest
 import asyncio
-from httpx import AsyncClient
-from httpx import ASGITransport
 from datetime import datetime, timedelta
 
 @pytest.mark.asyncio
