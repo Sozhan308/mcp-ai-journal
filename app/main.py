@@ -6,6 +6,9 @@ from app.routes.server_info import router as server_router
 from app.routes.config import router as config_router
 from app.routes.app_info import router as app_router
 from app.routes.user import router as user_router
+from app.routes.httpbin import router as httpbin_router
+from app.routes.user_profile import router as profile_router
+from app.routes.ipbin import router as ipbin_router
 from app.core.settings import Settings
 
 APP_VERSION = "0.1.0"
@@ -22,3 +25,6 @@ app.include_router(server_router, prefix=API_PREFIX)
 app.include_router(config_router, prefix=API_PREFIX)
 app.include_router(app_router, prefix=API_PREFIX)
 app.include_router(user_router, prefix=API_PREFIX)
+app.include_router(httpbin_router, prefix=API_PREFIX)
+app.include_router(profile_router, prefix=API_PREFIX)
+app.include_router(ipbin_router,prefix=API_PREFIX)

@@ -77,15 +77,56 @@ This journal documents my 30-day journey to gain production-level expertise in:
 
 ---
 
-## Day 3 — Pydantic v2 Deep Dive
-### 🎯 Goal
-### 🛠 Steps Completed
-### ✅ Achievements
-### 💡 Key Learnings
-### 📂 Code Links
+## Day 3 — Pydantic v2 Deep Dive  
 
-## Day 4 — Async I/O & Background Tasks
-...
+### 🎯 Goal  
+Understand how to validate, serialize, and document request/response data with Pydantic v2 inside FastAPI.  
+
+### 🛠 Steps Completed  
+- Created `UserCreationSchema` using Pydantic’s `Field`, `EmailStr`, and `default_factory`.  
+- Explored schema-driven request bodies (`user: UserCreationSchema`) vs plain params.  
+- Wrote tests ensuring constraints like `min_length` on username and email format validation.  
+- Learned how Swagger/OpenAPI auto-updates based on schema definitions.  
+- Practiced quiz-style validation: identifying when query params, path params, or request body is expected.  
+
+### ✅ Achievements  
+- Endpoints now automatically validate inputs (username length, email format, timestamps).  
+- Swagger UI body editor became editable after binding schema → strong link between **request body** and **Pydantic models**.  
+- All tests passed for `/user` endpoint, verifying schema correctness.  
+
+### 💡 Key Learnings  
+- **Schema = Contract**: When schema is bound to a POST body, Swagger exposes the JSON editor. Without it, only query/path params appear.  
+- **Validation is declarative**: No need for manual checks — Pydantic enforces rules like `min_length=3` or valid email format.  
+- **Default factories** (like `datetime.now(timezone.utc)`) make models dynamic at runtime.  
+- **Tests confirm schema guarantees** — e.g., a failing username `"ab"` proves validation works.  
+
+---
+
+## Day 4 — Async I/O & Background Tasks  
+
+### 🎯 Goal  
+Learn to handle external HTTP calls asynchronously, mock dependencies cleanly in tests, and explore background execution patterns.  
+
+### 🛠 Steps Completed  
+- Integrated `httpx.AsyncClient` with FastAPI dependencies.  
+- Created `/external-httpbin` endpoint fetching data from `https://httpbin.org/get`.  
+- Modeled the response in `HttpBinResponse` (`url`, `origin`, `user_agent`, `fetched_at`).  
+- Wrote fake clients (`FakeClient`, `FakeResp`) to override `get_http_client` in tests.  
+- Ensured dependency overrides replaced the whole client cleanly without patching internals.  
+
+### ✅ Achievements  
+- Tests for `/external-httpbin` pass using **fake dependencies** instead of live HTTP calls.  
+- Learned how to override dependencies in `app.dependency_overrides` for isolated testing.  
+- Practiced cleanup: `app.dependency_overrides.clear()` to avoid cross-test leaks.  
+- Observed async flow: `await client.get()` inside route logic, with safe `.aclose()`.  
+
+### 💡 Key Learnings  
+- **Async I/O**: External calls should be `await`ed to avoid blocking the event loop.  
+- **Dependency override > patching**: Overriding keeps tests aligned with FastAPI’s design, while patching internals like `httpx.AsyncClient.get` is brittle.  
+- **Schema-first response models** give a clear contract for what endpoints must return.  
+- **Fake clients are lightweight**: build small classes (`json()`, `status_code`) to mimic responses and test logic without real network calls.  
+- **Dependency Injection** ensures route logic can be tested in isolation — scaling better for bigger projects.  
+
 
 ## Day 5 — Testing & Coverage
 ...
